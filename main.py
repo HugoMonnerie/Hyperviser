@@ -11,11 +11,12 @@ Released under the MIT license
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
-from localMonitoring import LocalMonitoring
+from App import App
+
 
 def main():
-    LocalMonitoring().printData()
-    LocalMonitoring().reloadData()
+    App().start()
+
 
 if __name__ == '__main__':
     main()
