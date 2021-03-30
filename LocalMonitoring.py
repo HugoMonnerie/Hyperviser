@@ -12,8 +12,9 @@ class LocalMonitoring:
     """
         class local monitoring
     """
+
     def __init__(self):
-        self.monitoring_data = {'CPU': self.cpuInfo(), 'RAM': self.ramInfo(), 'SpaceDisk': self.spaceDiskInfo()}
+        self.monitoring_data = self.fetchMonitoringData()
 
     def cpuInfo(self):
         """
@@ -46,5 +47,11 @@ class LocalMonitoring:
         """
         reload data
         """
-        self.monitoring_data = {'CPU': self.cpuInfo(), 'RAM': self.ramInfo(), 'SpaceDisk': self.spaceDiskInfo()}
+        self.monitoring_data = self.fetchMonitoringData()
         print(self.monitoring_data)
+
+    def fetchMonitoringData(self):
+        """
+        reload data
+        """
+        return {'CPU': self.cpuInfo(), 'RAM': self.ramInfo(), 'SpaceDisk': self.spaceDiskInfo()}
