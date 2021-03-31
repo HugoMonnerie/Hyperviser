@@ -49,6 +49,7 @@ class LocalMonitoring:
         """
         self.monitoring_data = self.fetchMonitoringData()
         print(self.monitoring_data)
+        return self.monitoring_data
 
     def fetchMonitoringData(self):
         """
