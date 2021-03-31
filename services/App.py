@@ -10,6 +10,7 @@ CONFIG_INFLUXDB_TOKEN = "token"
 CONFIG_INFLUXDB_ORG = "org"
 CONFIG_INFLUXDB_BUCKET = "bucket"
 CONFIG_INFLUXDB_URL = "url"
+CONFIG_INFLUXDB = "influx_db"
 
 
 class App:
@@ -19,21 +20,16 @@ class App:
         self.influx_db_data = None
 
     def start(self):
+
         config_data = YamlReader(CONFIG_FILE_PATH).yaml_data
-        self.influx_db_data = InfluxDB(config_data["influx_db"][CONFIG_INFLUXDB_URL],
-                                       config_data["influx_db"][CONFIG_INFLUXDB_TOKEN])
-        self.influx_db_data.send_data(config_data["influx_db"][CONFIG_INFLUXDB_BUCKET],
-                                      config_data["influx_db"][CONFIG_INFLUXDB_ORG],
-                                      self.local_monitoring.fetchMonitoringData())
+
         if not config_data:
-            self.cron_jobs.dataJob(5, self.local_monitoring.reloadData)
+            self.cron_jobs.addJobs(5, self.local_monitoring.reloadData)
         else:
-            self.cron_jobs.dataCronJob(
-                config_data[CONFIG_TIME_EXECUTION_NAME], self.local_monitoring.reloadData)
-            self.cron_jobs.dataCronJob(
-                config_data[CONFIG_TIME_EXECUTION_NAME], self.local_monitoring.reloadData)
-            # self.cron_jobs.sendInfluxDBDataCronJob(5, self.influx_db_data.send_data(
-            #     config_data["influx_db"][CONFIG_INFLUXDB_BUCKET],
-            #     config_data["influx_db"][CONFIG_INFLUXDB_ORG],
-            #     self.local_monitoring.fetchMonitoringData()))
+            self.influx_db_data = InfluxDB(
+                config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_URL], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_TOKEN])
+
+            self.cron_jobs.addJobsWithArgs(
+                config_data[CONFIG_TIME_EXECUTION_NAME], self.influx_db_data.sendData, [config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_BUCKET], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_ORG], self.local_monitoring])
+
         self.cron_jobs.startJobs()

@@ -16,13 +16,15 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 class InfluxDB:
     def __init__(self, url, token):
         self.client = InfluxDBClient(url=url, token=token)
-        self.org = InfluxDBClient(org=org)
-        self.bucket = InfluxDBClient(bucket=bucket)
-        self.data = InfluxDBClient(data=data)
 
-
-    def send_data(self, bucket, org, data):
+    def sendData(self, bucket, org, local_monitoring_obj):
         write_api = self.client.write_api(write_options=SYNCHRONOUS)
-        data = "mem,host=host1 used_percent=23.43234543"
-        print("juyhtg")
-        write_api.write(bucket, org, data)
+        dataa = "mem,host=host1 used_percent=23.43234543"
+        print(local_monitoring_obj.reloadData(), "iciiiiiiiiiiiiiiiiiiiiii \n")
+        write_api.write(bucket, org, dataa)
+
+    def formatData(self, bucket, org, local_monitoring_obj):
+        write_api = self.client.write_api(write_options=SYNCHRONOUS)
+        dataa = "mem,host=host1 used_percent=23.43234543"
+        print(local_monitoring_obj.reloadData(), "iciiiiiiiiiiiiiiiiiiiiii \n")
+        write_api.write(bucket, org, dataa)
