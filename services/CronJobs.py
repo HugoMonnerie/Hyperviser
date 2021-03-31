@@ -5,15 +5,13 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 class CronJobs:
 
-    def __init__(self, time_in_seconds, local_monitoring):
+    def __init__(self):
         self.scheduler = BlockingScheduler()
-        self.local_monitoring = local_monitoring
-        self.time_in_seconds = time_in_seconds
 
-    def dataJob(self):
+    def dataCronJob(self, time_in_seconds, job_to_execut):
         self.scheduler.add_executor('processpool')
-        self.scheduler.add_job(self.local_monitoring.reloadData,
-                               'interval', seconds=self.time_in_seconds)
+        self.scheduler.add_job(job_to_execut,
+                               'interval', seconds=time_in_seconds)
         try:
             self.scheduler.start()
         except (KeyboardInterrupt, SystemExit):
