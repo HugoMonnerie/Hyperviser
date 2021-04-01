@@ -14,34 +14,105 @@ class LocalMonitoring:
     """
 
     def __init__(self):
-        self.monitoring_data = {'CPU': self.cpuInfo(
-        ), 'RAM': self.ramInfo(), 'SpaceDisk': self.spaceDiskInfo()}
+        self.monitoring_data = {'CPU': self.cpuInfo(),
+                                'RAM': self.ramInfo(),
+                                'Partition_disk': self.partitionDisksInfo(),
+                                'Other_disk_info': self.otherDiskInfo(),
+                                'Network': self.netInfo(),
+                                'Sensors': self.sensorsInfo()}
 
     def cpuInfo(self):
         """
 
         :return: CPU info
         """
-        return {'user_mode': psutil.cpu_times().user,
-                'kernel_mode': psutil.cpu_times().system,
-                'nothing_mode': psutil.cpu_times().idle}
+        return {'cpu_times_user': psutil.cpu_times().user,
+                'cpu_times_system': psutil.cpu_times().system,
+                'cpu_times_idle': psutil.cpu_times().idle,
+                'cpu_percent': psutil.cpu_percent(),
+                'cpu_times_percent': psutil.cpu_times_percent(),
+                'cpu_stats_ctx_switches': psutil.cpu_stats().ctx_switches,
+                'cpu_stats_interrupts': psutil.cpu_stats().interrupts,
+                'cpu_stats_soft_interrupts': psutil.cpu_stats().soft_interrupts,
+                'cpu_stats_syscalls': psutil.cpu_stats().syscalls,
+                'getloadavg': psutil.getloadavg()
+                }
 
     def ramInfo(self):
         """
 
         :return: RAM info
         """
-        return {'total': psutil.virtual_memory().total,
-                'available': psutil.virtual_memory().available}
+        return {'virtual_memory_total': psutil.virtual_memory().total,
+                'virtual_memory_available': psutil.virtual_memory().available,
+                'swap_memory_total': psutil.swap_memory().total,
+                'swap_memory_used': psutil.swap_memory().used,
+                'swap_memory_free': psutil.swap_memory().free,
+                'swap_memory_percent': psutil.swap_memory().percent,
+                'swap_memory_sin': psutil.swap_memory().sin,
+                'swap_memory_sout': psutil.swap_memory().sout,
+                }
 
-    def spaceDiskInfo(self):
+    def partitionDisksInfo(self):
         """
 
-        :return: Space Disk info
+        :return: Disks info
         """
-        return [{'device': i.device, 'mountpoint': i.mountpoint} for i in psutil.disk_partitions()]
+        return [{'disk_partitions_device': i.device,
+                 'disk_partitions_mountpoint': i.mountpoint,
+                 'disk_partitions_fstype': i.fstype,
+                 'disk_partitions_opts': i.opts,
+                 'disk_partitions_maxfile': i.maxfile,
+                 'disk_partitions_maxpath': i.maxpath}
+                for i in psutil.disk_partitions()]
+
+    def otherDiskInfo(self):
+        """
+
+        :return: other Disk info
+        """
+        return {'disk_usage_total': psutil.disk_usage('/').total,
+                'disk_usage_used': psutil.disk_usage('/').used,
+                'disk_usage_free': psutil.disk_usage('/').free,
+                'disk_usage_percent': psutil.disk_usage('/').percent,
+                'disk_io_counters_read_count': psutil.disk_io_counters().read_count,
+                'disk_io_counters_write_count': psutil.disk_io_counters().write_count,
+                'disk_io_counters_read_bytes': psutil.disk_io_counters().read_bytes,
+                'disk_io_counters_write_bytes': psutil.disk_io_counters().write_bytes
+                }
+
+    def netInfo(self):
+        """
+
+        :return: Network info
+        """
+        return {'net_io_counters_bytes_sent': psutil.net_io_counters().bytes_sent,
+                'net_io_counters_bytes_recv': psutil.net_io_counters().bytes_recv,
+                'net_io_counters_packets_sent': psutil.net_io_counters().packets_sent,
+                'net_io_counters_packets_recv': psutil.net_io_counters().packets_recv,
+                'net_io_counters_errin': psutil.net_io_counters().errin,
+                'net_io_counters_errout': psutil.net_io_counters().errout,
+                'net_io_counters_dropin': psutil.net_io_counters().dropin,
+                'net_io_counters_dropout': psutil.net_io_counters().dropout
+                }
+
+    def sensorsInfo(self):
+        """
+
+        :return: Sensors info
+        """
+        return {
+            # 'sensors_temperatures': psutil.sensors_temperatures(),
+            # 'sensors_fans': psutil.sensors_fans(),
+            'sensors_battery_percent': psutil.sensors_battery().percent,
+            'sensors_battery_secsleft': psutil.sensors_battery().secsleft,
+            'sensors_battery_power_plugged': psutil.sensors_battery().power_plugged
+        }
 
     def printData(self):
+        """
+        print data
+        """
         print(self.monitoring_data)
 
     def reloadData(self):
@@ -55,5 +126,9 @@ class LocalMonitoring:
         """
         reload data
         """
-        return {'CPU': self.cpuInfo(
-        ), 'RAM': self.ramInfo(), 'SpaceDisk': self.spaceDiskInfo()}
+        return {'CPU': self.cpuInfo(),
+                'RAM': self.ramInfo(),
+                'Disk': self.partitionDisksInfo(),
+                'Network': self.netInfo(),
+                'Sensors': self.sensorsInfo()
+                }

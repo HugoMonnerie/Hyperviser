@@ -28,7 +28,17 @@ class InfluxDB:
         print(dataaa, "iciiiiiiiiiiiiiiiiiiiiii \n")
         # write_api.write(bucket, org, dataaa['CPU'])
         write_api.write(bucket, org,
-                        Point("CPU").field("cpu", dataaa))
+                        Point("CPU").field("CPU", dataaa))
+        write_api.write(bucket, org,
+                        Point("RAM").field("RAM", dataaa))
+        write_api.write(bucket, org,
+                        Point("Partition_disk").field("Partition_disk", dataaa))
+        write_api.write(bucket, org,
+                        Point("Other_disk_info").field("Other_disk_info", dataaa))
+        write_api.write(bucket, org,
+                        Point("Network").field("Network", dataaa))
+        write_api.write(bucket, org,
+                        Point("Sensors").field("Sensors", dataaa))
 
 
     # def formatDataCpu(self, data):
