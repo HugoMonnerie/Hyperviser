@@ -1,3 +1,11 @@
+"""App script
+
+Copyright (c) 2021 Marion Meurant, Francesco Hart, Hugo Monnerie
+All Rights Reserved.
+Released under the MIT license
+
+"""
+
 from services.LocalMonitoring import LocalMonitoring
 
 from services.CronJobs import CronJobs
@@ -14,13 +22,18 @@ CONFIG_INFLUXDB = "influx_db"
 
 
 class App:
+    """
+    class App
+    """
     def __init__(self):
         self.local_monitoring = LocalMonitoring()
         self.cron_jobs = CronJobs()
         self.influx_db_data = None
 
     def start(self):
-
+        """
+        start App
+        """
         config_data = YamlReader(CONFIG_FILE_PATH).yaml_data
 
         if not config_data:

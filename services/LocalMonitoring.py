@@ -1,6 +1,6 @@
-"""Module name
+"""Local Monitoring script
 
-Copyright (c) 2021 Hugo Monnerie
+Copyright (c) 2021 Marion Meurant, Francesco Hart, Hugo Monnerie
 All Rights Reserved.
 Released under the MIT license
 
@@ -10,7 +10,7 @@ import psutil
 
 class LocalMonitoring:
     """
-        class local monitoring
+    class local monitoring
     """
 
     def __init__(self):
@@ -23,7 +23,7 @@ class LocalMonitoring:
 
     def cpuInfo(self):
         """
-
+        get CPU info
         :return: CPU info
         """
         return {'cpu_times_user': psutil.cpu_times().user,
@@ -42,7 +42,7 @@ class LocalMonitoring:
 
     def ramInfo(self):
         """
-
+        get RAM info
         :return: RAM info
         """
         return {'virtual_memory_total': psutil.virtual_memory().total,
@@ -57,7 +57,7 @@ class LocalMonitoring:
 
     def partitionDisksInfo(self):
         """
-
+        get partition disk info
         :return: Disks info
         """
         return [{'disk_partitions_device': i.device,
@@ -70,7 +70,7 @@ class LocalMonitoring:
 
     def otherDiskInfo(self):
         """
-
+        get other disk info
         :return: other Disk info
         """
         return {'disk_usage_total': psutil.disk_usage('/').total,
@@ -85,7 +85,7 @@ class LocalMonitoring:
 
     def netInfo(self):
         """
-
+        get network info
         :return: Network info
         """
         return {'net_io_counters_bytes_sent': psutil.net_io_counters().bytes_sent,
@@ -100,7 +100,7 @@ class LocalMonitoring:
 
     def sensorsInfo(self):
         """
-
+        get sensors info
         :return: Sensors info
         """
         return {
@@ -126,7 +126,7 @@ class LocalMonitoring:
 
     def fetchMonitoringData(self):
         """
-        reload data
+        fetch data
         """
         return {'CPU': self.cpuInfo(),
                 'RAM': self.ramInfo(),

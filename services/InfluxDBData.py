@@ -1,18 +1,12 @@
-"""Module name
+"""InfluxDB data script
 
-Copyright (c) 2021 Marion Meurant
+Copyright (c) 2021 Marion Meurant, Francesco Hart, Hugo Monnerie
 All Rights Reserved.
 Released under the MIT license
 
 """
-import itertools
+
 from datetime import datetime
-from random import random
-
-import json
-
-from services.LocalMonitoring import LocalMonitoring
-
 from influxdb_client import InfluxDBClient, Point, WritePrecision, client
 from influxdb_client.client.write_api import SYNCHRONOUS
 
@@ -26,10 +20,10 @@ class InfluxDB:
 
     def sendData(self, bucket, org, local_monitoring_obj):
         """
-
-        :param bucket:
-        :param org:
-        :param local_monitoring_obj:
+        send data to influxDB
+        :param bucket: name's bucket
+        :param org: name's organisation
+        :param local_monitoring_obj: all info hardware
         """
         data = local_monitoring_obj.reloadData()
         for name_hardware in data:
@@ -43,11 +37,11 @@ class InfluxDB:
 
     def formatData(self, bucket, org, name_hardware, data):
         """
-
-        :param bucket:
-        :param org:
-        :param name_hardware:
-        :param data:
+        format Data for influxDB
+        :param bucket: name's bucket
+        :param org: name's organisation
+        :param name_hardware: name's hardware
+        :param data: all data
         """
         try:
             for field, value in data.items():
