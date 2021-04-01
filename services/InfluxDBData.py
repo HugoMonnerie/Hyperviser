@@ -19,12 +19,18 @@ class InfluxDB:
 
     def sendData(self, bucket, org, local_monitoring_obj):
         write_api = self.client.write_api(write_options=SYNCHRONOUS)
-        dataa = "mem,host=host1 used_percent=23.43234543"
-        print(local_monitoring_obj.reloadData(), "iciiiiiiiiiiiiiiiiiiiiii \n")
-        write_api.write(bucket, org, dataa)
 
-    def formatData(self, bucket, org, local_monitoring_obj):
-        write_api = self.client.write_api(write_options=SYNCHRONOUS)
-        dataa = "mem,host=host1 used_percent=23.43234543"
-        print(local_monitoring_obj.reloadData(), "iciiiiiiiiiiiiiiiiiiiiii \n")
-        write_api.write(bucket, org, dataa)
+        dataa = "mem,host=host1 used_percent=60"
+        data = self.formatDataCpu(local_monitoring_obj.reloadData())
+        print(local_monitoring_obj.reloadData()[
+              "CPU"], "iciiiiiiiiiiiiiiiiiiiiii \n")
+        write_api.write(
+            bucket, org, [{"fields": data["CPU"]}])
+
+    def formatDataCpu(self, data):
+        data_formatted = "mem,host=host1"
+        for elem in data["CPU"]:
+            data_formatted = data_formatted + elem + \
+                ": " + str(data["CPU"][elem])+", "
+        print(data_formatted)
+        return data["CPU"]
