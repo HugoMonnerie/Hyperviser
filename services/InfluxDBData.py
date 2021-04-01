@@ -15,33 +15,38 @@ from services.LocalMonitoring import LocalMonitoring
 
 from influxdb_client import InfluxDBClient, Point, WritePrecision, client
 from influxdb_client.client.write_api import SYNCHRONOUS
+import sys
+import os
+import pika
+import json
 
 
 class InfluxDB:
     """
     class InfluxDB
     """
-    def __init__(self, url, token):
-        self.client = InfluxDBClient(url=url, token=token)
 
-    def sendData(self, bucket, org, local_monitoring_obj):
+    def __init__(self, url, token, bucket, org):
+        self.client = InfluxDBClient(url=url, token=token)
+        self.org = org
+        self.bucket = bucket
+
+    def sendData(self,  local_monitoring_obj, channel):
         """
 
         :param bucket:
         :param org:
         :param local_monitoring_obj:
         """
-        data = local_monitoring_obj.reloadData()
-        for name_hardware in data:
-            print("////////////////" + name_hardware + "//////////////////")
-            if name_hardware == "Partition_disk":
-                for i in data[name_hardware]:
-                    self.formatData(bucket, org, name_hardware, i)
-            else:
-                hardware_dict = data[name_hardware]
-                self.formatData(bucket, org, name_hardware, hardware_dict)
+        pass
+        # channel.queue_declare(queue='hardware')
 
-    def formatData(self, bucket, org, name_hardware, data):
+        #data_to_send = json.dumps(local_monitoring_obj.reloadData())
+       # channel.basic_publish(exchange='',
+        # routing_key="hardware",
+        # body=data_to_send)
+
+    def formatAndWriteData(self, name_hardware, data):
         """
 
         :param bucket:
@@ -58,6 +63,33 @@ class InfluxDB:
                     .tag("hardware", name_hardware) \
                     .field(field, value) \
                     .time(datetime.utcnow(), WritePrecision.NS)
-                write_api.write(bucket, org, point)
+                write_api.write(self.bucket, self.org, point)
         except ImportError:
             print(ImportError)
+
+    def callback(self, ch, method, properties, body):
+
+        for name_hardware in body:
+            print("////////////////" + name_hardware + "//////////////////")
+            if name_hardware == "Partition_disk":
+                for i in body[name_hardware]:
+                    self.formatAndWriteData(
+                        name_hardware, i)
+            else:
+                hardware_dict = body[name_hardware]
+                self.formatAndWriteData(
+                    name_hardware, hardware_dict)
+        print(" [x] Received %r" % body)
+
+    def fetchData(self, channel):
+        channel.queue_declare(queue='hardware')
+
+        try:
+            channel.basic_consume(queue='hardware',
+                                  auto_ack=True,
+                                  on_message_callback=self.callback)
+            print("I heard you")
+
+            channel.start_consuming()
+        except:
+            pass
