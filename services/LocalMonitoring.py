@@ -30,12 +30,14 @@ class LocalMonitoring:
                 'cpu_times_system': psutil.cpu_times().system,
                 'cpu_times_idle': psutil.cpu_times().idle,
                 'cpu_percent': psutil.cpu_percent(),
-                'cpu_times_percent': psutil.cpu_times_percent(),
+                'cpu_times_percent_user': psutil.cpu_times_percent().user,
+                'cpu_times_percent_system': psutil.cpu_times_percent().system,
+                'cpu_times_percent_idle': psutil.cpu_times_percent().idle,
                 'cpu_stats_ctx_switches': psutil.cpu_stats().ctx_switches,
                 'cpu_stats_interrupts': psutil.cpu_stats().interrupts,
                 'cpu_stats_soft_interrupts': psutil.cpu_stats().soft_interrupts,
                 'cpu_stats_syscalls': psutil.cpu_stats().syscalls,
-                'getloadavg': psutil.getloadavg()
+                # 'getloadavg': psutil.getloadavg()
                 }
 
     def ramInfo(self):
@@ -50,7 +52,7 @@ class LocalMonitoring:
                 'swap_memory_free': psutil.swap_memory().free,
                 'swap_memory_percent': psutil.swap_memory().percent,
                 'swap_memory_sin': psutil.swap_memory().sin,
-                'swap_memory_sout': psutil.swap_memory().sout,
+                'swap_memory_sout': psutil.swap_memory().sout
                 }
 
     def partitionDisksInfo(self):
@@ -128,7 +130,7 @@ class LocalMonitoring:
         """
         return {'CPU': self.cpuInfo(),
                 'RAM': self.ramInfo(),
-                'Disk': self.partitionDisksInfo(),
+                'Partition_disk': self.partitionDisksInfo(),
+                'Other_disk_info': self.otherDiskInfo(),
                 'Network': self.netInfo(),
-                'Sensors': self.sensorsInfo()
-                }
+                'Sensors': self.sensorsInfo()}
