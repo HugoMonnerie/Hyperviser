@@ -13,11 +13,22 @@ Released under the MIT license
 
 
 from services.App import App
+import sys
+import os
+from services.RabbitMq import RabbitMq
 
 
 def main():
+    rabbit_mq = RabbitMq()
     App().start()
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Interrupted')
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)

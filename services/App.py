@@ -3,6 +3,8 @@ from services.LocalMonitoring import LocalMonitoring
 from services.CronJobs import CronJobs
 from services.YamlReader import YamlReader
 from services.InfluxDBData import InfluxDB
+from services.RabbitMq import RabbitMq
+import threading
 
 CONFIG_FILE_PATH = "configuration/conf.yaml"
 CONFIG_TIME_EXECUTION_NAME = "time_execution_reload_data"
@@ -15,6 +17,7 @@ CONFIG_INFLUXDB = "influx_db"
 
 class App:
     def __init__(self):
+        self.rabbit_mq = RabbitMq()
         self.local_monitoring = LocalMonitoring()
         self.cron_jobs = CronJobs()
         self.influx_db_data = None
@@ -29,7 +32,11 @@ class App:
             self.influx_db_data = InfluxDB(
                 config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_URL], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_TOKEN])
 
+            # self.cron_jobs.addJobsWithArgs(
+            #   config_data[CONFIG_TIME_EXECUTION_NAME], self.rabbit_mq.sendData)
+
             self.cron_jobs.addJobsWithArgs(
-                config_data[CONFIG_TIME_EXECUTION_NAME], self.influx_db_data.sendData, [config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_BUCKET], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_ORG], self.local_monitoring])
+                config_data[CONFIG_TIME_EXECUTION_NAME], self.influx_db_data.sendData, [config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_BUCKET], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_ORG], self.local_monitoring],  self.rabbit_mq.sendData)
 
         self.cron_jobs.startJobs()
+        self.rabbit_mq.fetchData()
