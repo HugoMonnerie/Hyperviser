@@ -7,7 +7,7 @@ Released under the MIT license
 """
 
 from datetime import datetime
-from influxdb_client import InfluxDBClient, Point, WritePrecision, client
+from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 
@@ -15,6 +15,7 @@ class InfluxDB:
     """
     class InfluxDB
     """
+
     def __init__(self, url, token):
         self.client = InfluxDBClient(url=url, token=token)
 
@@ -27,7 +28,7 @@ class InfluxDB:
         """
         data = local_monitoring_obj.reloadData()
         for name_hardware in data:
-            print("////////////////" + name_hardware + "//////////////////")
+            # print("////////////////" + name_hardware + "//////////////////")
             if name_hardware == "Partition_disk":
                 for i in data[name_hardware]:
                     self.formatData(bucket, org, name_hardware, i)
@@ -45,8 +46,8 @@ class InfluxDB:
         """
         try:
             for field, value in data.items():
-                print(field)
-                print(value)
+                # print(field)
+                # print(value)
                 write_api = self.client.write_api(write_options=SYNCHRONOUS)
                 point = Point("data") \
                     .tag("hardware", name_hardware) \

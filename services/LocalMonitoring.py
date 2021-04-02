@@ -37,7 +37,6 @@ class LocalMonitoring:
                 'cpu_stats_interrupts': psutil.cpu_stats().interrupts,
                 'cpu_stats_soft_interrupts': psutil.cpu_stats().soft_interrupts,
                 'cpu_stats_syscalls': psutil.cpu_stats().syscalls,
-                # 'getloadavg': psutil.getloadavg()
                 }
 
     def ramInfo(self):
@@ -104,11 +103,8 @@ class LocalMonitoring:
         :return: Sensors info
         """
         return {
-            # 'sensors_temperatures': psutil.sensors_temperatures(),
-            # 'sensors_fans': psutil.sensors_fans(),
             'sensors_battery_percent': psutil.sensors_battery().percent,
-            'sensors_battery_secsleft': psutil.sensors_battery().secsleft,
-            'sensors_battery_power_plugged': psutil.sensors_battery().power_plugged
+            'sensors_battery_secsleft': psutil.sensors_battery().secsleft
         }
 
     def printData(self):

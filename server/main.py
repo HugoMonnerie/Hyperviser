@@ -1,5 +1,12 @@
+"""Main script server
+
+Copyright (c) 2021 Marion Meurant, Francesco Hart, Hugo Monnerie
+All Rights Reserved.
+Released under the MIT license
+
+"""
+
 from flask import Flask
-import requests
 import psutil
 from flask import jsonify
 
@@ -8,6 +15,10 @@ app = Flask(__name__)
 
 @app.route('/sensors')
 def fetchSensors():
+    """
+    fetch sensors
+    :return: json
+    """
     return jsonify({
         'sensors_temperatures': psutil.sensors_temperatures(),
         'sensors_fans': psutil.sensors_fans(),
@@ -19,6 +30,10 @@ def fetchSensors():
 
 @app.route('/network')
 def fetchNetwork():
+    """
+    fetch network
+    :return: type json
+    """
     return {'net_io_counters_bytes_sent': psutil.net_io_counters().bytes_sent,
             'net_io_counters_bytes_recv': psutil.net_io_counters().bytes_recv,
             'net_io_counters_packets_sent': psutil.net_io_counters().packets_sent,
@@ -32,6 +47,10 @@ def fetchNetwork():
 
 @app.route('/other_disk_info')
 def fetchOtherDiskInfo():
+    """
+    fetch other disk info
+    :return: type json
+    """
     return {'disk_usage_total': psutil.disk_usage('/').total,
             'disk_usage_used': psutil.disk_usage('/').used,
             'disk_usage_free': psutil.disk_usage('/').free,
@@ -45,6 +64,10 @@ def fetchOtherDiskInfo():
 
 @app.route('/partition_disk')
 def fetchPartitionDisk():
+    """
+    fetch partition disk
+    :return: type json
+    """
     return jsonify([{'disk_partitions_device': i.device,
                    'disk_partitions_mountpoint': i.mountpoint,
                      'disk_partitions_fstype': i.fstype,
@@ -56,6 +79,10 @@ def fetchPartitionDisk():
 
 @app.route('/cpu')
 def fetchCpu():
+    """
+    fetch CPU info
+    :return: type json
+    """
     return {'cpu_times_user': psutil.cpu_times().user,
             'cpu_times_system': psutil.cpu_times().system,
             'cpu_times_idle': psutil.cpu_times().idle,
@@ -71,6 +98,10 @@ def fetchCpu():
 
 @app.route('/ram')
 def fetchRam():
+    """
+    fetch ram info
+    :return: type json
+    """
     return {'virtual_memory_total': psutil.virtual_memory().total,
             'virtual_memory_available': psutil.virtual_memory().available,
             'swap_memory_total': psutil.swap_memory().total,
@@ -84,6 +115,10 @@ def fetchRam():
 
 @app.route('/')
 def fetchAllData():
+    """
+    fetch all data
+    :return: type json
+    """
     return jsonify({'CPU': {'cpu_times_user': psutil.cpu_times().user,
                             'cpu_times_system': psutil.cpu_times().system,
                             'cpu_times_idle': psutil.cpu_times().idle,
