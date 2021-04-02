@@ -34,6 +34,7 @@ def main():
         pika.ConnectionParameters('localhost'))
     channel = connection.channel()
     config_data = YamlReader(CONFIG_FILE_PATH).yaml_data
+
     influx_db_data = InfluxDB(
         config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_URL], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_TOKEN], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_BUCKET], config_data[CONFIG_INFLUXDB][CONFIG_INFLUXDB_ORG],)
 

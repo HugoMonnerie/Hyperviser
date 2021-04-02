@@ -122,6 +122,7 @@ class LocalMonitoring:
         reload data
         """
         self.monitoring_data = self.fetchMonitoringData()
+        print("iciiiiii")
         return self.monitoring_data
 
     def fetchMonitoringData(self):

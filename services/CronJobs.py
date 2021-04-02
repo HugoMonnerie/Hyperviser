@@ -13,7 +13,8 @@ class CronJobs:
         self.scheduler.add_job(job_to_execut,
                                'interval', seconds=time_in_seconds)
 
-    def addJobsWithArgs(self, time_in_seconds, job_to_execut, job_args=None):
+    def addJobsWithArgs(self, time_in_seconds, job_to_execut, job_args):
+        print(job_args, "jobss_argss")
         self.scheduler.add_job(job_to_execut,
                                'interval', seconds=time_in_seconds, args=job_args)
 

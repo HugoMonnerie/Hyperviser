@@ -19,6 +19,7 @@ import sys
 import os
 import pika
 import json
+import time
 
 
 class InfluxDB:
@@ -30,21 +31,27 @@ class InfluxDB:
         self.client = InfluxDBClient(url=url, token=token)
         self.org = org
         self.bucket = bucket
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters('localhost'))
+        self.channel = self.connection.channel()
 
-    def sendData(self,  local_monitoring_obj, channel):
+    def sendData(self,  fetchData):
+        print("laaaaaaaaaaaa")
         """
 
         :param bucket:
         :param org:
         :param local_monitoring_obj:
         """
-        pass
-        # channel.queue_declare(queue='hardware')
-
-        #data_to_send = json.dumps(local_monitoring_obj.reloadData())
-       # channel.basic_publish(exchange='',
-        # routing_key="hardware",
-        # body=data_to_send)
+        try:
+            time.sleep(2)
+            self.channel.queue_declare(queue='hardware')
+            data_to_send = json.dumps(fetchData)
+            self.channel.basic_publish(exchange='',
+                                       routing_key="hardware",
+                                       body=data_to_send)
+        except ImportError:
+            pass
 
     def formatAndWriteData(self, name_hardware, data):
         """
