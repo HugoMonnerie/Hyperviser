@@ -5,3 +5,11 @@ pip3 install schedule
 pip3 install rabbitmq
 pip3 install influxdb-client
 pip3 install Flask
+pip3 install dash-daq
+pip3 install gunicorn
+pip3 install dash
+pip3 install numpy
+pip3 install pandas
+pip3 install html
+pip3 install dash_core_components
+pip3 install plotly
